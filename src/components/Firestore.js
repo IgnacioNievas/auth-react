@@ -44,10 +44,10 @@ function Firestore({ user }) {
 			return;
 		}
 
-		if (tarea.length > 350) {
+		if (tarea.length > 50) {
 			Swal.fire({
 				icon: 'warning',
-				text: 'Supero el limite de caracteres permitidos de 350',
+				text: 'Supero el limite de caracteres permitidos de 50',
 				showConfirmButton: false,
 				timer: 3000,
 				timerProgressBar: true,
@@ -82,10 +82,10 @@ function Firestore({ user }) {
 		if (!tarea.trim()) {
 			return;
 		}
-		if (tarea.length > 350) {
+		if (tarea.length > 50) {
 			Swal.fire({
 				icon: 'warning',
-				text: 'Supero el limite de caracteres permitidos de 350',
+				text: 'Supero el limite de caracteres permitidos de 50',
 				showConfirmButton: false,
 				timer: 3000,
 				timerProgressBar: true,
@@ -144,7 +144,7 @@ function Firestore({ user }) {
 				<div>
 					<h1 className='text-center'>Lista de Tareas</h1>
 
-					<ul className='list-group '>
+					<ul className='list-group   '>
 						{modoTarea === false && tareas.length === 0 ? (
 							<div className='alert alert-warning text-center mt-3 '>
 								<h4 className='alert-heading'>No hay tareas</h4>
@@ -154,7 +154,7 @@ function Firestore({ user }) {
 							</div>
 						) : tareas.length > 0 ? (
 							tareas.map((docs, index) => (
-								<li className='list-group-item' key={index}>
+								<li className='text-center list-group-item ' key={index}>
 									{docs.texto}
 									<button
 										disabled={modo}
@@ -184,19 +184,18 @@ function Firestore({ user }) {
 					<h1 className='text-center'>
 						{modo ? 'Editar Tarea' : 'Agregar Tarea'}
 					</h1>
-					<form className='d-grid gap-2'>
+					<form className='d-grid gap-2 ms-2'>
 						<input
 							type='text'
-							className='form-control mb-2'
+							className='form-control  '
 							placeholder='Ingrese nueva tarea'
 							onChange={agregar}
 							value={tarea}
-							// maxLength='50'
 						/>
 						{modo ? (
 							<button
 								onClick={editarTarea}
-								className=' btn btn-success '
+								className=' btn btn-success  '
 								type='submit'>
 								Editar
 							</button>

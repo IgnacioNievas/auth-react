@@ -87,12 +87,36 @@ const Login = (props) => {
 	const resgistra = useCallback(async () => {
 		const localYear = new Date().getFullYear();
 		const userYear = new Date(fecha).getFullYear();
-		const localMonth = new Date().getMonth() + 1;
-		const userMonth = new Date(fecha).getMonth() + 1;
+		const localMonth = new Date().getUTCMonth() + 1;
+		const userMonth = new Date(fecha).getUTCMonth() + 1;
 		const localDay = new Date().getDate();
-		const userDay = new Date(fecha).getDate() + 1;
+		const userDay = new Date(fecha).getUTCDate();
 
-		if (userYear > localYear || userMonth > localMonth || userDay > localDay) {
+		const days = localDay - userDay;
+
+		debugger;
+		if (userYear === localYear && userMonth === localMonth && days < 0) {
+			Swal.fire({
+				icon: 'warning',
+				text: 'Fecha incorrecta, introduzca bien su fecha de nacimiento',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+			});
+			return;
+		} else if (
+			(userYear === localYear && userMonth > localMonth && days > 0) ||
+			(userYear === localYear && userMonth > localMonth && days <= 0)
+		) {
+			Swal.fire({
+				icon: 'warning',
+				text: 'Fecha incorrecta, introduzca bien su fecha de nacimiento',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+			});
+			return;
+		} else if (userYear > localYear) {
 			Swal.fire({
 				icon: 'warning',
 				text: 'Fecha incorrecta, introduzca bien su fecha de nacimiento',
