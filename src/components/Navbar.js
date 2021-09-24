@@ -5,17 +5,9 @@ import Swal from 'sweetalert2';
 import { auth } from '../servi/firebase';
 
 const Navbar = ({ esRegistro, isLoding, history }) => {
-	const link = {
-		textDecoration: 'none',
-		marginLeft: '20px',
-		color: 'black',
-		fontWeight: 'bolder',
-	};
-	const boton = { background: 'transparent', border: 'none', color: 'white' };
-
 	const signOut = () => {
 		auth.signOut().then(() => {
-			history.push('./login');
+			history.push('/login');
 		});
 	};
 
@@ -43,10 +35,10 @@ const Navbar = ({ esRegistro, isLoding, history }) => {
 
 	return (
 		<div className='navbar navbar-dark bg-dark'>
-			<Link className='navber-brand' to='/' style={link}>
-				<i
-					className='fas fa-address-card fa-2x'
-					style={{ marginRight: '20px', color: 'grey' }}></i>
+			<Link
+				className='navber-brand text-decoration-none ms-3 text-black fw-bloder'
+				to='/'>
+				<i className='fas fa-address-card fa-2x text-secondary me-3'></i>
 				AUTH
 			</Link>
 			<div>
@@ -62,12 +54,14 @@ const Navbar = ({ esRegistro, isLoding, history }) => {
 					) : null}
 
 					{isLoding !== null ? (
-						<button style={boton} onClick={confirmacionCerrarsesion}>
+						<button
+							className=' bg-transparent  border-0 text-white '
+							onClick={confirmacionCerrarsesion}>
 							sign Out
 						</button>
 					) : (
 						<NavLink to='/login' className='btn btn-dark mr-2'>
-							<button style={boton}>
+							<button className=' bg-transparent  border-0 text-white '>
 								{esRegistro ? '	Sign up' : 'Sign in'}
 							</button>
 						</NavLink>

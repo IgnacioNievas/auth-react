@@ -11,7 +11,7 @@ const Login = (props) => {
 	const [pass, setPass] = useState(
 		'' || JSON.parse(localStorage.getItem('password'))
 	);
-	const [tel, setTel] = useState('');
+	const [username, setUsername] = useState('');
 	const [fecha, setFecha] = useState('');
 	const [esRegistro, setEsregistro] = useState(false);
 	const [recordar, setRecordar] = useState(
@@ -25,9 +25,10 @@ const Login = (props) => {
 	const nuevoPass = (e) => {
 		setPass(e.target.value);
 	};
-	const nuevoTel = (e) => {
-		setTel(e.target.value);
+	const nuevoUsername = (e) => {
+		setUsername(e.target.value);
 	};
+
 	const nuevoFecha = (e) => {
 		setFecha(e.target.value);
 	};
@@ -84,20 +85,55 @@ const Login = (props) => {
 	}, [email, pass, props.history]);
 
 	const resgistra = useCallback(async () => {
+		const localYear = new Date().getFullYear();
+		const userYear = new Date(fecha).getFullYear();
+		const localMonth = new Date().getMonth() + 1;
+		const userMonth = new Date(fecha).getMonth() + 1;
+		const localDay = new Date().getDate();
+		const userDay = new Date(fecha).getDate() + 1;
+
+		if (userYear > localYear || userMonth > localMonth || userDay > localDay) {
+			Swal.fire({
+				icon: 'warning',
+				text: 'Fecha incorrecta, introduzca bien su fecha de nacimiento',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+			});
+			return;
+		}
+
+		const userName = await db.collection('datos_usuarios').get();
+
+		const usuarioName = await userName.docs.map((doc) => {
+			return doc.data().username;
+		});
+
+		if (usuarioName.find((user) => user === username)) {
+			Swal.fire({
+				icon: 'warning',
+				title: 'Nombre de usuario ya existente',
+				text: `Pruebe con otros distintos a estos: ${usuarioName} , los cuales ya se encuentran registrados`,
+				showConfirmButton: false,
+				timer: 5000,
+				timerProgressBar: true,
+			});
+			return;
+		}
+
 		try {
 			const objDatos = {
-				email: email,
-				password: pass,
-				phone: tel,
+				username: username,
 				fecha: fecha,
 			};
 
 			const res = await auth.createUserWithEmailAndPassword(email, pass);
 
 			await db.collection('datos_usuarios').doc(res.user.email).set(objDatos);
+
 			setPass('');
 			setFecha('');
-			setTel('');
+			setUsername('');
 			setEmail('');
 			props.history.push('/admin');
 		} catch (e) {
@@ -128,7 +164,7 @@ const Login = (props) => {
 				});
 			}
 		}
-	}, [email, pass, tel, fecha, props.history]);
+	}, [email, pass, username, fecha, props.history]);
 
 	const guardarUsuario = () => {
 		if (recordar === false) {
@@ -191,11 +227,7 @@ const Login = (props) => {
 
 	return (
 		<div className='container mt-5'>
-			<Navbar
-				esRegistro={esRegistro}
-				cambioLogin={cambioLogin}
-				isLoding={props.isLoding}
-			/>
+			<Navbar esRegistro={esRegistro} isLoding={props.isLoding} />
 			<div className='mt-4 '>
 				<h3 className='text-center'>
 					{esRegistro ? ' Registro de usuarios ' : 'Acceda a la cuenta'}
@@ -231,18 +263,17 @@ const Login = (props) => {
 
 							{esRegistro ? (
 								<>
-									<label htmlFor='phone' className='form-label'>
-										Ingrese su número telefonico
+									<label htmlFor='username' className='form-label'>
+										*Ingrese un nombre de usuario
 									</label>
 									<input
-										type='tel'
-										placeholder='3412457824'
+										type='text'
+										placeholder='Ej:Nacho_bjj'
 										className='form-control mb-2'
-										name='phone'
-										onChange={nuevoTel}
-										value={tel}
-										minLength='6'
-										maxLength='10'
+										name='username'
+										onChange={nuevoUsername}
+										value={username}
+										required
 									/>
 									<label htmlFor='date' className='form-label'>
 										*Ingresar su fecha de nacimiento
@@ -274,13 +305,13 @@ const Login = (props) => {
 								</button>
 								<button
 									onClick={cambioLogin}
-									className='btn btn-outline-info btn-sm '
+									className='btn btn-outline-info btn-sm  mb-2'
 									type='button'>
 									{esRegistro ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}
 								</button>
 								{!esRegistro ? (
 									<button
-										className='btn btn-outline-primary btn-sm '
+										className='btn btn-outline-primary btn-sm  mb-2'
 										onClick={contrasenaNueva}
 										type='button'>
 										¿olvidaste tu contrseña

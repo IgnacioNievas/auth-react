@@ -19,6 +19,7 @@ function Firestore({ user }) {
 				}));
 
 				setTareas(arrayData);
+
 				if (tareas.length === 0) {
 					setModoTarea(false);
 				} else {
@@ -40,6 +41,17 @@ function Firestore({ user }) {
 		e.preventDefault();
 
 		if (!tarea.trim()) {
+			return;
+		}
+
+		if (tarea.length > 350) {
+			Swal.fire({
+				icon: 'warning',
+				text: 'Supero el limite de caracteres permitidos de 350',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+			});
 			return;
 		}
 
@@ -70,6 +82,17 @@ function Firestore({ user }) {
 		if (!tarea.trim()) {
 			return;
 		}
+		if (tarea.length > 350) {
+			Swal.fire({
+				icon: 'warning',
+				text: 'Supero el limite de caracteres permitidos de 350',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+			});
+			return;
+		}
+
 		try {
 			await db.collection(user.email).doc(id).update({ texto: tarea });
 			const arrayEditado = tareas.map((item) =>
@@ -117,11 +140,11 @@ function Firestore({ user }) {
 
 	return (
 		<div className='container mt-5'>
-			<div className='row'>
-				<div className='col-md-6 d-grid gap-2'>
-					<h1>Lista de Tareas</h1>
+			<div className='d-flex flex-wrap justify-content-around '>
+				<div>
+					<h1 className='text-center'>Lista de Tareas</h1>
 
-					<ul className='list-group'>
+					<ul className='list-group '>
 						{modoTarea === false && tareas.length === 0 ? (
 							<div className='alert alert-warning text-center mt-3 '>
 								<h4 className='alert-heading'>No hay tareas</h4>
@@ -141,7 +164,7 @@ function Firestore({ user }) {
 									</button>
 									<button
 										onClick={() => modoEdicion(docs)}
-										className='btn btn-warning btn-sm float-sm-end '>
+										className='btn btn-warning btn-sm float-sm-end ms-2 '>
 										<i className='fas fa-edit'></i>
 									</button>
 								</li>
@@ -157,27 +180,30 @@ function Firestore({ user }) {
 						)}
 					</ul>
 				</div>
-				<div className='col-md-6'>
-					<h1>{modo ? 'Editar Tarea' : 'Agregar Tarea'}</h1>
-					<form>
+				<div>
+					<h1 className='text-center'>
+						{modo ? 'Editar Tarea' : 'Agregar Tarea'}
+					</h1>
+					<form className='d-grid gap-2'>
 						<input
 							type='text'
 							className='form-control mb-2'
 							placeholder='Ingrese nueva tarea'
 							onChange={agregar}
 							value={tarea}
+							// maxLength='50'
 						/>
 						{modo ? (
 							<button
 								onClick={editarTarea}
-								className=' btn btn-success'
+								className=' btn btn-success '
 								type='submit'>
 								Editar
 							</button>
 						) : (
 							<button
 								onClick={agregarTarea}
-								className=' btn btn-dark'
+								className=' btn btn-dark '
 								type='submit'>
 								Agregar
 							</button>

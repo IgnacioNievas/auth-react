@@ -3,10 +3,10 @@ import Navbar from '../components/Navbar';
 const Inicio = (props) => {
 	return (
 		<>
-			<div style={{ marginBottom: '20px' }}>
+			<div className='mb-4'>
 				<Navbar isLoding={props.isLoding} />
 			</div>
-			<div style={{ backgroundColor: 'gray' }}>
+			<div className='bg-secondary'>
 				<div className='container'>
 					<h1 className='display-4 '>Auth App</h1>
 					<p className='lead  '>
