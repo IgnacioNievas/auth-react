@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { withRouter } from 'react-router';
-import { db, auth } from '../servi/firebase';
+import { db, auth, firebase } from '../servi/firebase';
 import Navbar from '../components/Navbar';
 import Swal from 'sweetalert2';
 
@@ -94,7 +94,7 @@ const Login = (props) => {
 
 		const days = localDay - userDay;
 
-		debugger;
+		// debugger;
 		if (userYear === localYear && userMonth === localMonth && days < 0) {
 			Swal.fire({
 				icon: 'warning',
@@ -189,6 +189,12 @@ const Login = (props) => {
 			}
 		}
 	}, [email, pass, username, fecha, props.history]);
+
+	const accederGoogle = useCallback(async () => {
+		const provider = await new firebase.auth.GoogleAuthProvider();
+		await auth.signInWithPopup(provider);
+		props.history.push('/admin');
+	}, [props.history]);
 
 	const guardarUsuario = () => {
 		if (recordar === false) {
@@ -326,6 +332,12 @@ const Login = (props) => {
 							<div className='d-grid gap-2'>
 								<button className='btn btn-dark btn-lg ' type='submit'>
 									{esRegistro ? 'Registrarse' : 'Acceder a cuenta'}
+								</button>
+								<button
+									className='btn btn-outline-dark btn-lg '
+									onClick={accederGoogle}>
+									Acceder con cuenta
+									<i className='fab fa-google text-primary ms-1'></i>oogle
 								</button>
 								<button
 									onClick={cambioLogin}
