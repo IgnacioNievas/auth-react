@@ -333,12 +333,7 @@ const Login = (props) => {
 								<button className='btn btn-dark btn-lg ' type='submit'>
 									{esRegistro ? 'Registrarse' : 'Acceder a cuenta'}
 								</button>
-								<button
-									className='btn btn-outline-dark btn-lg '
-									onClick={accederGoogle}>
-									Acceder con cuenta
-									<i className='fab fa-google text-primary ms-1'></i>oogle
-								</button>
+
 								<button
 									onClick={cambioLogin}
 									className='btn btn-outline-info btn-sm  mb-2'
@@ -346,12 +341,22 @@ const Login = (props) => {
 									{esRegistro ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?'}
 								</button>
 								{!esRegistro ? (
-									<button
-										className='btn btn-outline-primary btn-sm  mb-2'
-										onClick={contrasenaNueva}
-										type='button'>
-										¿olvidaste tu contrseña
-									</button>
+									<>
+										<button
+											type='button'
+											className='btn btn-outline-dark btn-lg '
+											onClick={accederGoogle}>
+											Acceder con cuenta
+											<i className='fab fa-google text-primary ms-1'></i>oogle
+										</button>
+
+										<button
+											className='btn btn-outline-primary btn-sm  mb-2'
+											onClick={contrasenaNueva}
+											type='button'>
+											¿olvidaste tu contrseña
+										</button>
+									</>
 								) : null}
 							</div>
 						</form>
