@@ -58,7 +58,7 @@ function Firestore({ user }) {
 		try {
 			const nuevoCampo = {
 				texto: tarea,
-				fecha: Date.now(),
+				fecha: new Date().toLocaleDateString(),
 			};
 			const data = await db.collection(user.email).add(nuevoCampo);
 
